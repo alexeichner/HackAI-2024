@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Find Your Price</title>
+</head>
+<body>
+    <nav id="navbar">
+        <a href="index.html">Home</a>
+        <a href="predict.html">Find Your Price</a>
+    </nav>
+
+    <main>
+        <h1>Input The following Values</h1>
+        <form id="form">
+            <label for="area">Area:</label>
+            <input type="text" id="area" name="area" value="7420">
+            <br>
+            
+            <label for="bedrooms">Bedrooms:</label>
+            <select id="bedrooms" name="bedrooms">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4" selected>4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <!-- Add more options as needed -->
+            </select>
+            <br>
+        
+            <label for="bathrooms">Bathrooms:</label>
+            <select id="bathrooms" name="bathrooms">
+              <option value="1">1</option>
+              <option value="2" selected>2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <!-- Add more options as needed -->
+            </select>
+            <br>
+        
+            <label for="stories">Stories:</label>
+            <select id="stories" name="stories">
+              <option value="1">1</option>
+              <option value="2" selected>2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <!-- Add more options as needed -->
+            </select>
+            <br>
+        
+            <label>Main Road:</label>
+            <input type="radio" id="mainroad-yes" name="mainroad" value="yes" checked>
+            <label for="mainroad-yes">Yes</label>
+            <input type="radio" id="mainroad-no" name="mainroad" value="no">
+            <label for="mainroad-no">No</label>
+            <br>
+        
+            <label>Guest Room:</label>
+            <input type="radio" id="guestroom-yes" name="guestroom" value="yes" checked>
+            <label for="guestroom-yes">Yes</label>
+            <input type="radio" id="guestroom-no" name="guestroom" value="no">
+            <label for="guestroom-no">No</label>
+            <br>
+        
+            <label>Basement:</label>
+            <input type="radio" id="basement-yes" name="basement" value="yes" checked>
+            <label for="basement-yes">Yes</label>
+            <input type="radio" id="basement-no" name="basement" value="no">
+            <label for="basement-no">No</label>
+            <br>
+        
+            <label>Hot Water Heating:</label>
+            <input type="radio" id="hotwaterheating-yes" name="hotwaterheating" value="yes" checked>
+            <label for="hotwaterheating-yes">Yes</label>
+            <input type="radio" id="hotwaterheating-no" name="hotwaterheating" value="no">
+            <label for="hotwaterheating-no">No</label>
+            <br>
+        
+            <label>Air Conditioning:</label>
+            <input type="radio" id="airconditioning-yes" name="airconditioning" value="yes" checked>
+            <label for="airconditioning-yes">Yes</label>
+            <input type="radio" id="airconditioning-no" name="airconditioning" value="no">
+            <label for="airconditioning-no">No</label>
+            <br>
+        
+            <label for="parking">Parking:</label>
+            <select id="parking" name="parking">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2" selected>2</option>
+              <option value="3">3</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <!-- Add more options as needed -->
+            </select>
+            <br>
+        
+            <label>Preferred Area:</label>
+            <input type="radio" id="prefarea-yes" name="prefarea" value="yes" checked>
+            <label for="prefarea-yes">Yes</label>
+            <input type="radio" id="prefarea-no" name="prefarea" value="no">
+            <label for="prefarea-no">No</label>
+            <br>
+        
+            <label for="furnishingstatus">Furnishing Status:</label>
+            <input type="radio" id="furnishingstatus-furnished" name="furnishingstatus" value="furnished" checked>
+            <label for="furnishingstatus-furnished">Furnished</label>
+            <input type="radio" id="furnishingstatus-semi" name="furnishingstatus" value="semi-furnished">
+            <label for="furnishingstatus-semi">Semi-Furnished</label>
+            <input type="radio" id="furnishingstatus-unfurnished" name="furnishingstatus" value="unfurnished">
+            <label for="furnishingstatus-unfurnished">Unfurnished</label>
+        
+            <br>
+        
+            <input type="submit" value="Submit">
+          </form>
+
+          <p>Output:</p>
+          <p id="output"></p>
+    </main>
+    <script type="text/javascript" src="dataValidation.js"></script>
+</body>
+</html>
