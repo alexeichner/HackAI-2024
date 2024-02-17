@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('form');
 
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', async function(event) {
         event.preventDefault(); // Prevent the default form submission
         
         const areaInput = document.getElementById('area');
@@ -33,7 +33,25 @@ document.addEventListener('DOMContentLoaded', function() {
         // Output the collected data (you can modify this part based on your needs)
         const output = document.getElementById('output');
         const jsonData = JSON.stringify(formData);
-        output.innerHTML = jsonData;
+        //output.innerHTML = jsonData;
+
+        // Send data to the server
+        try {
+            const response = await fetch('http://localhost:3000/submitData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+            
+            const result = await response.json();
+            output.innerHTML = result
+        } catch (error) {
+            console.error('Error sending data to the server:', error.message);
+        }
+            
+        
     });
 });
 
