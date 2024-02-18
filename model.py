@@ -3,41 +3,35 @@ import requests
 import sys
 import json
 import csv
+import math
 import pandas as pd
+import numpy as np
+from scipy import stats
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
 
-def process_json_data(user_dict):
+def evaluate_model(x_test, y_test, model):
+    # Evaluate models performance before remvoing outliers
+    print("test score:" + str(model.score(x_test, y_test).round(3)))
 
-    # new_dict = {"Unnamed": 0}
-    # new_dict.update(user_dict)
+    # Mean squared error
+    y_pred = model.predict(x_test)
+    print("Mean Squared error:" + str(math.sqrt(mean_squared_error(y_test, y_pred))))
 
-    # Creating output csv
-    csv_file_path = 'output.csv'
+    # Calculate permutation importance
+    perm_importance = permutation_importance(model, x_test, y_test, metric=mean_squared_error)
 
-    # Create placeholder rows for csv file
-    placeholder_row1 = [0, 0, 0, 0, "yes", "yes", "yes", "yes", "yes", 0, "yes", "furnished"]
-    placeholder_row2 = [0, 0, 0, 0, "no", "no", "no", "no", "no", 0, "no", "semi-furnished"]
-    placeholder_row3 = [0, 0, 0, 0, "yes", "yes", "yes", "yes", "yes", 0, "yes", "unfurnished"]
+    # Sort features by importance score
+    sorted_importance = sorted(perm_importance.items(), key=lambda x: x[1], reverse=True)
 
-    # Open csv in write mode
-    with open(csv_file_path, 'w', newline="") as csv_file:
-        # Create a CSV writer object
-        csv_writer = csv.writer(csv_file)
+    # Print feature importance scores
+    print("\nPermutation Importance:")
+    for feature, importance in sorted_importance:
+        print(f"{feature}: {importance}")
 
-        # Write header row
-        csv_writer.writerow(user_dict.keys())
-
-        # Write the value row
-        csv_writer.writerow(user_dict.values())
-        csv_writer.writerow(placeholder_row1)
-        csv_writer.writerow(placeholder_row2)
-        csv_writer.writerow(placeholder_row3)
-
-
-
-def predict():
-    training_data = pd.read_csv("HousingDataset.csv")
+def create_linear_regression_model(training_data):
+    
 
     #Converting object types to category types
     training_data['mainroad'] = training_data['mainroad'].astype('category')
@@ -72,10 +66,72 @@ def predict():
 
     # Build using the training data
     lr.fit(x_train, y_train)
+    evaluate_model(x_test, y_test, lr)
+    
+    return lr
 
-    # Mean squared error
-    y_pred = lr.predict(x_test)
+def removeOutliers(df):
+    # Assuming 'value' is the column with numeric values
+    z_scores = stats.zscore(df['area'])
+    threshold = 3
+    outlier_indices = (abs(z_scores) > threshold)
 
+    # Step 3: Filter or remove the outliers from the DataFrame
+    df_no_outliers = df[~outlier_indices]
+
+    # Step 4: Write the filtered DataFrame back to a CSV file
+    df_no_outliers.to_csv('filtered_file.csv', index=False)
+
+def permutation_importance(model, X, y, metric, random_state=42):
+    baseline = metric(y, model.predict(X))
+    importance_scores = {}
+    np.random.seed(random_state)
+    for feature in X.columns:
+        X_permuted = X.copy()
+        X_permuted[feature] = np.random.permutation(X_permuted[feature])
+        permuted_score = metric(y, model.predict(X_permuted))
+        importance_scores[feature] = baseline - permuted_score
+    return importance_scores
+
+
+def process_json_data(user_dict):
+
+    # new_dict = {"Unnamed": 0}
+    # new_dict.update(user_dict)
+
+    # Creating output csv
+    csv_file_path = 'output.csv'
+
+    # Create placeholder rows for csv file
+    placeholder_row1 = [0, 0, 0, 0, "yes", "yes", "yes", "yes", "yes", 0, "yes", "furnished"]
+    placeholder_row2 = [0, 0, 0, 0, "no", "no", "no", "no", "no", 0, "no", "semi-furnished"]
+    placeholder_row3 = [0, 0, 0, 0, "yes", "yes", "yes", "yes", "yes", 0, "yes", "unfurnished"]
+
+    # Open csv in write mode
+    with open(csv_file_path, 'w', newline="") as csv_file:
+        # Create a CSV writer object
+        csv_writer = csv.writer(csv_file)
+
+        # Write header row
+        csv_writer.writerow(user_dict.keys())
+
+        # Write the value row
+        csv_writer.writerow(user_dict.values())
+        csv_writer.writerow(placeholder_row1)
+        csv_writer.writerow(placeholder_row2)
+        csv_writer.writerow(placeholder_row3)
+
+
+
+def predict():
+    training_data = pd.read_csv("HousingDataset.csv")
+
+    lr = create_linear_regression_model(training_data)
+    removeOutliers(training_data)
+    cleaned_data = pd.read_csv("filtered_file.csv")
+    lr_no_outliers = create_linear_regression_model(cleaned_data)
+
+    
     # Model prediction
     user_data = pd.read_csv("output.csv")
 
@@ -90,7 +146,7 @@ def predict():
 
     # trying to predict the first row
     data_new = user_data[:1]
-    predicted_price = lr.predict(data_new).round(2)
+    predicted_price = lr_no_outliers.predict(data_new).round(2)
 
     # Convert predicted price to JSON
     result_data = {'predicted_price': predicted_price[0]}
