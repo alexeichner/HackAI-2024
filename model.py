@@ -11,6 +11,52 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 
+def run_test_data(model):
+    csv_file_path = "test_output.csv"
+    test_csv_file_path = "TestData.csv"
+    
+    test_data = pd.read_csv("TestData.csv")
+
+    test_data['mainroad'] = test_data['mainroad'].astype('category')
+    test_data['guestroom'] = test_data['guestroom'].astype('category')
+    test_data['basement'] = test_data['basement'].astype('category')
+    test_data['hotwaterheating'] = test_data['hotwaterheating'].astype('category')
+    test_data['airconditioning'] = test_data['airconditioning'].astype('category')
+    test_data['prefarea'] = test_data['prefarea'].astype('category')
+    test_data['furnishingstatus'] = test_data['furnishingstatus'].astype('category')
+    test_data = pd.get_dummies(test_data)
+            
+    x = test_data.drop("id", axis=1)
+    
+    with open(csv_file_path, 'w', newline="") as csv_file:
+        # Create a CSV writer object
+        csv_writer = csv.writer(csv_file)
+
+        # Write header 
+        csv_writer.writerow(['id','price'])
+
+        
+
+        for i in range(len(x)):
+            data_new = x[i:i+1]
+            prediction = model.predict(data_new).round(2)
+            csv_writer.writerow([i, prediction])
+
+        # for row in x:
+        #     id_counter += 1
+        #     predicted_price = model.predict(row).round(2)
+        #     csv_writer.writerow(id_counter, predicted_price)
+
+
+        # Write the rest of the rows
+        # while id_counter < number_of_rows:
+            
+        #     data_new = x[id_counter:id_counter+1]
+        #     print(data_new)
+        #     predicted_price = model.predict(data_new).round(2)
+        #     csv_writer.writerow([id_counter+1, predicted_price])
+        #     id_counter += 1
+
 def evaluate_model(x_test, y_test, model):
     # Evaluate models performance before remvoing outliers
     print("test score:" + str(model.score(x_test, y_test).round(3)))
@@ -32,7 +78,6 @@ def evaluate_model(x_test, y_test, model):
 
 def create_linear_regression_model(training_data):
     
-
     #Converting object types to category types
     training_data['mainroad'] = training_data['mainroad'].astype('category')
     training_data['guestroom'] = training_data['guestroom'].astype('category')
@@ -131,7 +176,7 @@ def predict():
     cleaned_data = pd.read_csv("filtered_file.csv")
     lr_no_outliers = create_linear_regression_model(cleaned_data)
 
-    
+    run_test_data(lr_no_outliers)
     # Model prediction
     user_data = pd.read_csv("output.csv")
 
