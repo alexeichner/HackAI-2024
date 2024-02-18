@@ -14,7 +14,7 @@
 
     <main>
         <h1>Input The following Values</h1>
-        <form id="form">
+        <form id="form" onsubmit="return false">
             <label for="area">Area:</label>
             <input type="text" id="area" name="area" value="7420">
             <br>
@@ -136,10 +136,8 @@
             <br>
         
             <input type="submit" value="Submit">
-          </form>
 
-          <p>Output:</p>
-          <p id="output"></p>
+          </form>
     </main>
     <script type="text/javascript" src="dataValidation.js"></script>
 </body>

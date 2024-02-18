@@ -1,0 +1,5 @@
+area,bedrooms,bathrooms,stories,mainroad,guestroom,basement,hotwaterheating,airconditioning,parking,prefarea,furnishingstatus
+7420,4,2,2,yes,yes,yes,yes,yes,2,yes,furnished
+0,0,0,0,yes,yes,yes,yes,yes,0,yes,furnished
+0,0,0,0,no,no,no,no,no,0,no,semi-furnished
+0,0,0,0,yes,yes,yes,yes,yes,0,yes,unfurnished
