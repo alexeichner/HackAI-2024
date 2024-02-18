@@ -12,11 +12,13 @@ app.post('/submitData', (req, res) => {
     const formData = req.body;
 
     // Example command to run a Python script
-    const command = `python3 ${__dirname}/test.py ${JSON.stringify(formData)}`;
+    const command = `python3 /Users/alexeichner/Documents/GitHub/HackAI-2024/test.py '${JSON.stringify(formData)}'`;
 
     exec(command, (error, stdout, stderr) => {
         if (error) {
             console.error(`Error executing Python script: ${error.message}`);
+            console.error(`Python script stderr: ${stderr}`);
+            console.error(`Error executing Python script. Exit code: ${error.code}`);
             return res.status(500).json({ error: 'Internal server error' });
         }
 
