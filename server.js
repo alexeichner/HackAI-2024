@@ -13,7 +13,9 @@ app.post('/submitData', (req, res) => {
     const formData = req.body;
 
     // Example command to run a Python script
-    const command = `python3 /Users/alexeichner/Documents/GitHub/HackAI-2024/model.py '${JSON.stringify(formData)}'`;
+    //const command = `python3 /Users/alexeichner/Documents/GitHub/HackAI-2024/model.py '${JSON.stringify(formData)}'`;
+    const command = `python3 ${require('path').join(__dirname, 'model.py')} '${JSON.stringify(formData)}'`;
+
 
     exec(command, (error, stdout, stderr) => {
         if (error) {
